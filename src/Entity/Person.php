@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\MappedSuperclass
@@ -13,26 +14,31 @@ class Person
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read"})
      */
     protected $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read"})
      */
     protected $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read"})
      */
     protected $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read"})
      */
     protected $company;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"users_read"})
      */
     protected $createdAt;
 

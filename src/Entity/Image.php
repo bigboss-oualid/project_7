@@ -5,10 +5,14 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ImageRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"GET"},
+ *     itemOperations={"GET"}
+ * )
  */
 class Image
 {
@@ -21,11 +25,13 @@ class Image
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"products_read"})
      */
     private $url;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"products_read"})
      */
     private $name;
 
