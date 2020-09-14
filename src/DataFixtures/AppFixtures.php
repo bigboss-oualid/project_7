@@ -13,61 +13,106 @@ use Faker\Factory;
 
 class AppFixtures extends Fixture
 {
-    public function load(ObjectManager $manager)
+    private $faker;
+
+    public function __construct()
     {
-        $faker = Factory::create('fr_FR');
+        $this->faker = Factory::create('fr_FR');
+    }
+
+    public function load(ObjectManager $manager): void
+    {
         $handys = ['Samsung galaxy S10', 'Samsung galaxy S20', 'Samsung galaxy S10+', 'Samsung galaxy S20+', 'Samsung galaxy S20+ Ultra', 'Samsung Note10', 'Samsung Note20', 'Samsung Note10+', 'Samsung Note20+', 'Samsung Note20+ Ultra'];
         $details = ['Batterie: 4000 mAh, Mémoire: 12 Go RAM, proc: Exynos 990 Samsung, Caméra: 12Mpx', 'Batterie: 6000 mAh, Mémoire: 8 Go RAM, proc: Exynos 980 Samsung, Caméra: 12Mpx', 'Batterie: 6600 mAh, Mémoire: 16 Go RAM, proc: Exynos 1000 Samsung, Caméra: 16Mpx'];
 
-        $category = new Category();
-        $category->setName('Handy');
-        $manager->persist($category);
+        $this->createCategory('Handy', $manager);
 
         for ($c = 0; $c < 10; ++$c) {
-            $customer = new Customer();
+            $this->createCustomer($manager, $c);
 
-            $customer->setLastName($faker->lastName)
-                ->setFirstName($faker->firstName)
-                ->setUsername($faker->userName)
-                ->setEmail($faker->email)
-                ->setCompany($faker->company)
-                ->setCreatedAt($faker->dateTimeBetween('-6 months'));
+            $customer = $this->getReference('customer_'.$c);
 
             for ($u = 0; $u < mt_rand(5, 20); ++$u) {
-                $user = new User();
-                $user->setLastName($faker->lastName)
-                    ->setFirstName($faker->firstName)
-                    ->setEmail($faker->email)
-                    ->setCompany($faker->company)
-                    ->setCreatedAt($faker->dateTimeBetween('-1 months'))
-                    ->setCustomer($customer);
-
-                $manager->persist($user);
+                $this->createUser($manager, $customer);
             }
-            $manager->persist($customer);
         }
 
         for ($p = 0; $p < 10; ++$p) {
-            $product = new Product();
-            $product->setName($handys[$p])
-                ->setBarcode($faker->ean13)
-                ->setDescription($faker->paragraphs(3, true))
-                ->setDetails($details[mt_rand(0, 2)])
-                ->setPrice($faker->numberBetween(500, 1500))
-                ->setQuantity($faker->numberBetween(50, 300))
-                ->setCreatedAt($faker->dateTimeBetween('-8 months'))
-                ->setCategory($category);
-            for ($i = 0; $i < mt_rand(1, 3); ++$i) {
-                $image = new Image();
-                $image->setName(preg_replace('/\s+/', '_', $handys[$p]).'_'.$i)
-                    ->setUrl('images/handy/')
-                    ->setProduct($product);
+            $category = $this->getReference('category');
 
-                $manager->persist($image);
+            $this->createProduct($manager, $category, $p, $handys, $details);
+            $product = $this->getReference('product_'.$p);
+            for ($i = 0; $i < mt_rand(1, 3); ++$i) {
+                $this->createImage($manager, $product, $handys, $i, $p);
             }
             $manager->persist($product);
         }
 
         $manager->flush();
+    }
+
+    private function createCategory(string $name, ObjectManager $manager): void
+    {
+        $category = new Category();
+        $category->setName($name);
+
+        $this->addReference('category', $category);
+
+        $manager->persist($category);
+    }
+
+    private function createCustomer(ObjectManager $manager, int $c): void
+    {
+        $customer = new Customer();
+
+        $customer->setLastName($this->faker->lastName)
+            ->setFirstName($this->faker->firstName)
+            ->setUsername($this->faker->userName)
+            ->setEmail($this->faker->email)
+            ->setCompany($this->faker->company)
+            ->setCreatedAt($this->faker->dateTimeBetween('-6 months'));
+
+        $this->addReference('customer_'.$c, $customer);
+
+        $manager->persist($customer);
+    }
+
+    private function createUser(ObjectManager $manager, Customer $customer): void
+    {
+        $user = new User();
+        $user->setLastName($this->faker->lastName)
+            ->setFirstName($this->faker->firstName)
+            ->setEmail($this->faker->email)
+            ->setCompany($this->faker->company)
+            ->setCreatedAt($this->faker->dateTimeBetween('-1 months'))
+            ->setCustomer($customer);
+
+        $manager->persist($user);
+    }
+
+    private function createProduct(ObjectManager $manager, Category $category, int $p, array $handys, array $details): void
+    {
+        $product = new Product();
+        $product->setName($handys[$p])
+            ->setBarcode($this->faker->ean13)
+            ->setDescription($this->faker->paragraphs(3, true))
+            ->setDetails($details[mt_rand(0, 2)])
+            ->setPrice($this->faker->numberBetween(500, 1500))
+            ->setQuantity($this->faker->numberBetween(50, 300))
+            ->setCreatedAt($this->faker->dateTimeBetween('-8 months'))
+            ->setCategory($category);
+        $this->addReference('product_'.$p, $product);
+
+        $manager->persist($product);
+    }
+
+    private function createImage(ObjectManager $manager, Product $product, array $handys, int $i, int $p): void
+    {
+        $image = new Image();
+        $image->setName(strtolower(preg_replace('/\s+/', '_', $handys[$p]).'_'.$i))
+            ->setUrl('images/handy/')
+            ->setProduct($product);
+
+        $manager->persist($image);
     }
 }
