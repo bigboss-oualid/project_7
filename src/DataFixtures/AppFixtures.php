@@ -10,14 +10,20 @@ use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
     private $faker;
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $passwordEncoder;
 
-    public function __construct()
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->faker = Factory::create('fr_FR');
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function load(ObjectManager $manager): void
@@ -27,7 +33,7 @@ class AppFixtures extends Fixture
 
         $this->createCategory('Handy', $manager);
 
-        for ($c = 0; $c < 10; ++$c) {
+        for ($c = 0; $c < 5; ++$c) {
             $this->createCustomer($manager, $c);
 
             $customer = $this->getReference('customer_'.$c);
@@ -37,7 +43,7 @@ class AppFixtures extends Fixture
             }
         }
 
-        for ($p = 0; $p < 10; ++$p) {
+        for ($p = 0; $p < mt_rand(3, 20); ++$p) {
             $category = $this->getReference('category');
 
             $this->createProduct($manager, $category, $p, $handys, $details);
@@ -69,6 +75,7 @@ class AppFixtures extends Fixture
             ->setFirstName($this->faker->firstName)
             ->setUsername($this->faker->userName)
             ->setEmail($this->faker->email)
+            ->setPassword($this->passwordEncoder->encodePassword($customer, 'demo'))
             ->setCompany($this->faker->company)
             ->setCreatedAt($this->faker->dateTimeBetween('-6 months'));
 

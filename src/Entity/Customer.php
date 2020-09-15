@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
@@ -18,7 +20,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * )
  * @UniqueEntity("username", message="A user already exists with this username")
  */
-class Customer extends Person
+class Customer extends Person implements UserInterface
 {
     /**
      * @ORM\Id
@@ -31,6 +33,18 @@ class Customer extends Person
      * @ORM\Column(type="string", length=255)
      */
     private $username;
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="The field is required!")
+     */
+    private $password;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="customer")
@@ -56,6 +70,45 @@ class Customer extends Person
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return string The encoded password if any
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    /**
+     * @param mixed $password
+     *
+     *@return Customer
+     */
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $currentRoles = $this->roles;
+        // Guarantee every user at least has ROLE_USER
+        $currentRoles[] = 'ROLE_USER';
+
+        return array_unique($currentRoles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
@@ -89,5 +142,20 @@ class Customer extends Person
         }
 
         return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt(): ?String
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
     }
 }
