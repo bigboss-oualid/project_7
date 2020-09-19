@@ -15,6 +15,23 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AppFixtures extends Fixture
 {
     private $faker;
+    private const HANDYS = [
+        'Samsung galaxy S10',
+        'Samsung galaxy S20',
+        'Samsung galaxy S10+',
+        'Samsung galaxy S20+',
+        'Samsung galaxy S20+ Ultra',
+        'Samsung Note10',
+        'Samsung Note20',
+        'Samsung Note10+',
+        'Samsung Note20+',
+        'Samsung Note20+ Ultra',
+    ];
+    private const DETAILS = [
+        'Batterie: 4000 mAh, Mémoire: 12 Go RAM, proc: Exynos 990 Samsung, Caméra: 12Mpx',
+        'Batterie: 6000 mAh, Mémoire: 8 Go RAM, proc: Exynos 980 Samsung, Caméra: 12Mpx',
+        'Batterie: 6600 mAh, Mémoire: 16 Go RAM, proc: Exynos 1000 Samsung, Caméra: 16Mpx',
+    ];
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -28,14 +45,11 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $handys = ['Samsung galaxy S10', 'Samsung galaxy S20', 'Samsung galaxy S10+', 'Samsung galaxy S20+', 'Samsung galaxy S20+ Ultra', 'Samsung Note10', 'Samsung Note20', 'Samsung Note10+', 'Samsung Note20+', 'Samsung Note20+ Ultra'];
-        $details = ['Batterie: 4000 mAh, Mémoire: 12 Go RAM, proc: Exynos 990 Samsung, Caméra: 12Mpx', 'Batterie: 6000 mAh, Mémoire: 8 Go RAM, proc: Exynos 980 Samsung, Caméra: 12Mpx', 'Batterie: 6600 mAh, Mémoire: 16 Go RAM, proc: Exynos 1000 Samsung, Caméra: 16Mpx'];
-
         $this->createCategory('Handy', $manager);
 
         for ($c = 0; $c < 5; ++$c) {
             $this->createCustomer($manager, $c);
-
+            /** @var Customer $customer */
             $customer = $this->getReference('customer_'.$c);
 
             for ($u = 0; $u < mt_rand(5, 20); ++$u) {
@@ -44,12 +58,14 @@ class AppFixtures extends Fixture
         }
 
         for ($p = 0; $p < mt_rand(3, 20); ++$p) {
+            /** @var Category $category */
             $category = $this->getReference('category');
 
-            $this->createProduct($manager, $category, $p, $handys, $details);
+            $this->createProduct($manager, $category, $p);
+            /** @var Product $product */
             $product = $this->getReference('product_'.$p);
             for ($i = 0; $i < mt_rand(1, 3); ++$i) {
-                $this->createImage($manager, $product, $handys, $i, $p);
+                $this->createImage($manager, $product, $i, $p);
             }
             $manager->persist($product);
         }
@@ -69,15 +85,16 @@ class AppFixtures extends Fixture
 
     private function createCustomer(ObjectManager $manager, int $c): void
     {
+        /** @var Customer $customer */
         $customer = new Customer();
 
-        $customer->setLastName($this->faker->lastName)
-            ->setFirstName($this->faker->firstName)
-            ->setUsername($this->faker->userName)
-            ->setEmail($this->faker->email)
+        $customer->setUsername($this->faker->userName)
             ->setPassword($this->passwordEncoder->encodePassword($customer, 'demo'))
+            ->setLastName($this->faker->lastName)
+            ->setFirstName($this->faker->firstName)
+            ->setEmail($this->faker->email)
             ->setCompany($this->faker->company)
-            ->setCreatedAt($this->faker->dateTimeBetween('-6 months'));
+            ->setCreatedAt($this->faker->dateTimeBetween('-6 months', '-1 months'));
 
         $this->addReference('customer_'.$c, $customer);
 
@@ -87,23 +104,23 @@ class AppFixtures extends Fixture
     private function createUser(ObjectManager $manager, Customer $customer): void
     {
         $user = new User();
-        $user->setLastName($this->faker->lastName)
+        $user->setCustomer($customer)
+            ->setLastName($this->faker->lastName)
             ->setFirstName($this->faker->firstName)
             ->setEmail($this->faker->email)
-            ->setCompany($this->faker->company)
-            ->setCreatedAt($this->faker->dateTimeBetween('-1 months'))
-            ->setCustomer($customer);
+            ->setCompany($customer->getCompany())
+            ->setCreatedAt($this->faker->dateTimeBetween('-1 months'));
 
         $manager->persist($user);
     }
 
-    private function createProduct(ObjectManager $manager, Category $category, int $p, array $handys, array $details): void
+    private function createProduct(ObjectManager $manager, Category $category, int $p): void
     {
         $product = new Product();
-        $product->setName($handys[$p])
+        $product->setName(self::HANDYS[$p])
             ->setBarcode($this->faker->ean13)
             ->setDescription($this->faker->paragraphs(3, true))
-            ->setDetails($details[mt_rand(0, 2)])
+            ->setDetails(self::DETAILS[mt_rand(0, 2)])
             ->setPrice($this->faker->numberBetween(500, 1500))
             ->setQuantity($this->faker->numberBetween(50, 300))
             ->setCreatedAt($this->faker->dateTimeBetween('-8 months'))
@@ -113,10 +130,10 @@ class AppFixtures extends Fixture
         $manager->persist($product);
     }
 
-    private function createImage(ObjectManager $manager, Product $product, array $handys, int $i, int $p): void
+    private function createImage(ObjectManager $manager, Product $product, int $i, int $p): void
     {
         $image = new Image();
-        $image->setName(strtolower(preg_replace('/\s+/', '_', $handys[$p]).'_'.$i))
+        $image->setName(strtolower(preg_replace('/\s+/', '_', self::HANDYS[$p]).'_'.$i))
             ->setUrl('images/handy/')
             ->setProduct($product);
 
