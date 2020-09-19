@@ -9,8 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
@@ -22,6 +22,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Customer extends Person implements UserInterface
 {
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_USER = 'ROLE_USER';
+
+    const DEFAULT_ROLES = [self::ROLE_USER];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -59,6 +64,7 @@ class Customer extends Person implements UserInterface
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->roles = self::ROLE_USER;
     }
 
     public function getId(): ?int
@@ -103,11 +109,7 @@ class Customer extends Person implements UserInterface
      */
     public function getRoles(): array
     {
-        $currentRoles = $this->roles;
-        // Guarantee every user at least has ROLE_USER
-        $currentRoles[] = 'ROLE_USER';
-
-        return array_unique($currentRoles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self

@@ -7,7 +7,7 @@ api_platform:
         versions: [3]
 
     title: 'Bilemo-API'
-    description: 'BileMo is a company offering a variety of premium mobile phones. through our API you can get the list of your users or our product, and of course you will be laso able to add new user or delete one.'
+    description: 'BileMo is a company offering a variety of premium mobile phones. through our API you can get the list of your users or our product, and of course you will be also able to add new user or delete one.'
     version: '0.0.0'
     collection:
         order: 'DESC'
@@ -15,4 +15,6 @@ api_platform:
             client_enabled: true
             items_per_page: 10
             client_items_per_page: true
+            partial: false
+            client_partial: true
 

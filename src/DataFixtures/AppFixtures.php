@@ -89,12 +89,17 @@ class AppFixtures extends Fixture
         $customer = new Customer();
 
         $customer->setUsername($this->faker->userName)
+            ->setRoles([Customer::ROLE_USER])
             ->setPassword($this->passwordEncoder->encodePassword($customer, 'demo'))
             ->setLastName($this->faker->lastName)
             ->setFirstName($this->faker->firstName)
             ->setEmail($this->faker->email)
             ->setCompany($this->faker->company)
             ->setCreatedAt($this->faker->dateTimeBetween('-6 months', '-1 months'));
+
+        if (0 === $c) {
+            $customer->setRoles([Customer::ROLE_ADMIN]);
+        }
 
         $this->addReference('customer_'.$c, $customer);
 
