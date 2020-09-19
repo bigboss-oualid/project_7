@@ -16,8 +16,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ApiResource(
- *     collectionOperations={"GET"},
- *     itemOperations={"GET"},
+ *     collectionOperations={
+ *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}
+ *     },
+ *     itemOperations={
+ *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}
+ *     },
  *     normalizationContext={"groups"={"products_read"}}
  * )
  * @ApiFilter(SearchFilter::class, properties={"name":"partial", "details":"partial", "price":"start"})

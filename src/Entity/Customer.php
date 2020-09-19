@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @ApiResource(
  *     collectionOperations={},
- *     itemOperations={"GET"}
+ *     itemOperations={"GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}}
  * )
  * @UniqueEntity("username", message="A user already exists with this username")
  */
@@ -38,6 +38,10 @@ class Customer extends Person implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="The field is required!")
+     * @Assert\Regex(
+     *     pattern="/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\W).{7,}/",
+     *     message="Password must be at least 7 characters long and contain at least one digit, one specific character one upper & lower case letter"
+     * )
      */
     private $password;
 
