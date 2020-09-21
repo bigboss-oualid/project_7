@@ -37,3 +37,7 @@ services:
                 event: lexik_jwt_authentication.on_jwt_created,
                 method: updateJwtData
             }
+
+    App\Services\Serializer\CustomerContextBuilder:
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: ['@App\Services\Serializer\CustomerContextBuilder.inner']

@@ -33,12 +33,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *      "GET"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() == user",
+ *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *          "normalization_context" = {
  *              "groups"={"users_read"}
  *          }
  *      },
- *      "DELETE"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user and object.getCompany() === user.getCompany()"}
+ *      "DELETE"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user"}
  *     }
  * )
  * @ApiFilter(SearchFilter::class, properties={"firstName":"start", "lastName":"start"})
@@ -57,6 +57,7 @@ class User extends Person
     /**
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"users_read_admin"})
      */
     private $customer;
 

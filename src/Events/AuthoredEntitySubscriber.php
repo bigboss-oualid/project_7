@@ -12,7 +12,6 @@ namespace App\Events;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Customer;
 use App\Entity\User;
-use DateTime;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;

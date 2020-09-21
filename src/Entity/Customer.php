@@ -10,14 +10,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
- * @ApiResource(
- *     collectionOperations={},
- *     itemOperations={"GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}}
- * )
  * @UniqueEntity("username", message="A user already exists with this username")
  */
 class Customer extends Person implements UserInterface
@@ -36,6 +33,7 @@ class Customer extends Person implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"users_read_admin"})
      */
     private $username;
 
@@ -52,12 +50,12 @@ class Customer extends Person implements UserInterface
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"users_read_admin"})
      */
     private $roles = [];
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="customer")
-     * @ApiSubresource()
      */
     private $users;
 

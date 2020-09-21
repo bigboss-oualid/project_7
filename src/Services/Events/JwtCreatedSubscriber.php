@@ -14,7 +14,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 
 class JwtCreatedSubscriber
 {
-    public function updateJwtData(JWTCreatedEvent $event)
+    public function updateJwtData(JWTCreatedEvent $event): void
     {
         /** @var Customer $customer */
         $customer = $event->getUser();
