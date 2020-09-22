@@ -38,7 +38,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "groups"={"users_read"}
  *          }
  *      },
- *      "DELETE"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user"}
+ *      "DELETE"={
+ *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user",
+ *          "requirements"={"id"="\d+"}
+ *      }
  *     }
  * )
  * @ApiFilter(SearchFilter::class, properties={"firstName":"start", "lastName":"start"})

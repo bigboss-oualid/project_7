@@ -17,4 +17,6 @@ api_platform:
             client_items_per_page: true
             partial: false
             client_partial: true
+    exception_to_status:
+        App\Exception\InvalidBodyException: 415
 
