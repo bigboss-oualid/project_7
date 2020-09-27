@@ -19,4 +19,3 @@ api_platform:
             client_partial: true
     exception_to_status:
         App\Exception\InvalidBodyException: 415
-        App\Exception\ResourceNotFoundException: 404
