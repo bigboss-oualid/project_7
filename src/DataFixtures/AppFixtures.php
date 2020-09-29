@@ -51,13 +51,12 @@ class AppFixtures extends Fixture
             $this->createCustomer($manager, $c);
             /** @var Customer $customer */
             $customer = $this->getReference('customer_'.$c);
-
-            for ($u = 0; $u < mt_rand(5, 20); ++$u) {
+            for ($u = 0; $u < 15; ++$u) {
                 $this->createUser($manager, $customer);
             }
         }
 
-        for ($p = 0; $p < mt_rand(3, 20); ++$p) {
+        for ($p = 0; $p < 10; ++$p) {
             /** @var Category $category */
             $category = $this->getReference('category');
 
@@ -83,7 +82,7 @@ class AppFixtures extends Fixture
         $manager->persist($category);
     }
 
-    private function createCustomer(ObjectManager $manager, int $c): void
+    private function createCustomer(ObjectManager $manager, int $c = 0): void
     {
         /** @var Customer $customer */
         $customer = new Customer();
@@ -98,7 +97,9 @@ class AppFixtures extends Fixture
             ->setCreatedAt($this->faker->dateTimeBetween('-6 months', '-1 months'));
 
         if (0 === $c) {
-            $customer->setRoles([Customer::ROLE_ADMIN]);
+            $customer->setRoles([Customer::ROLE_ADMIN])
+                ->setUsername('admin')
+            ->setCompany('TEST');
         }
 
         $this->addReference('customer_'.$c, $customer);
