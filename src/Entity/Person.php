@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -14,7 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Person
 {
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=3, minMessage="First name must contain between 3 and 255 characters!", max=255, maxMessage="First name must contain between 3 and 255 characters")
@@ -56,6 +56,11 @@ class Person
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     public function getFirstName(): ?string
     {

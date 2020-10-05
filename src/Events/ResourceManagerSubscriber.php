@@ -9,7 +9,6 @@
 
 namespace App\Events;
 
-use ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -32,11 +31,14 @@ class ResourceManagerSubscriber implements EventSubscriberInterface
         if (!$exceptionEvent->getThrowable() instanceof NotFoundHttpException) {
             return;
         }
-        //dd($throwable = $exceptionEvent->getThrowable());
         //Save Resource name and id in index 2 & 3 of $uri[]
         $uri = $request->getRequestUri();
         $dividedUri = explode('/', $uri);
 
+        //check if uri exist in route
+        if (!isset($dividedUri[2])) {
+            return;
+        }
         //check if resource not found
         if (
             ('products' === $dividedUri[2] || 'users' === $dividedUri[2])

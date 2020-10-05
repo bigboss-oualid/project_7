@@ -38,6 +38,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "groups"={"users_read"}
  *          }
  *      },
+ *      "PUT"={
+ *          "access_control" = "is_granted('ROLE_SUPERADMIN')",
+ *          "normalization_context" = {
+ *              "groups"={"users_post"}
+ *          }
+ *      },
  *      "DELETE"={
  *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user",
  *          "requirements"={"id"="\d+"}
@@ -60,14 +66,9 @@ class User extends Person
     /**
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"users_read_admin"})
+     * @Groups({"users_post"})
      */
     private $customer;
-
-    public function __construct()
-    {
-        $this->createdAt = new DateTime();
-    }
 
     public function getId(): ?int
     {
