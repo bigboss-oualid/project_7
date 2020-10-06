@@ -97,7 +97,7 @@ class AppFixtures extends Fixture
             ->setCreatedAt($this->faker->dateTimeBetween('-6 months', '-1 months'));
 
         if (0 === $c) {
-            $customer->setRoles([Customer::ROLE_ADMIN])
+            $customer->setRoles([Customer::ROLE_SUPERADMIN])
                 ->setUsername('admin')
             ->setCompany('TEST');
         }

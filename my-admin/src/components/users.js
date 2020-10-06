@@ -21,6 +21,7 @@ const UserShow = (props) => (
             <TextField source="firstName" />
             <TextField source="lastName" />
             <EmailField source="email" />
+            <ChipField label="Added from" source="customer.username" />
             <TextField source="company" />
             <DateField source="createdAt" />
         </SimpleShowLayout>
@@ -44,11 +45,11 @@ const UserEdit = props => {
     return (
         <Edit undoable={false} title={<ResourceTitle />} onSuccess={onSuccess}  onFailure={onFailure} {...props}>
             <SimpleForm warnWhenUnsavedChanges >
+                <ChipField disabled label="Added from" source="customer.username" />
                 <TextInput disabled label="URI" source="id" />
                 <TextInput  source="firstName" validate={validateName} />
                 <TextInput  source="lastName" validate={validateName} />
                 <TextInput type="email" source="email" validate={validateEmail}  />
-                <TextInput  source="company" validate={validateName} />
             </SimpleForm>
         </Edit>
     );

@@ -11,7 +11,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=ImageRepository::class)
  * @ApiResource(
  *     collectionOperations={
- *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
+ *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "POST"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
  *     },
  *     itemOperations={
  *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},

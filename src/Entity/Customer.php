@@ -17,20 +17,19 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("username", message="A user already exists with this username")
  * @ApiResource(
  *     collectionOperations={
- *      "GET",
- *      "POST"
+ *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "POST"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
  *     },
  *     itemOperations={
- *      "GET",
- *      "PUT",
- *      "DELETE"
+ *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "PUT"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "DELETE"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
  *     }
  * )
  */
 class Customer extends Person implements UserInterface
 {
     const ROLE_SUPERADMIN = 'ROLE_SUPERADMIN';
-    const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_USER = 'ROLE_USER';
 
     const DEFAULT_ROLES = [self::ROLE_USER];
@@ -44,7 +43,7 @@ class Customer extends Person implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_post"})
+     * @Groups({"user_post", "users_read"})
      */
     private $username;
 
@@ -61,7 +60,6 @@ class Customer extends Person implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"users_read_admin"})
      */
     private $roles = [];
 

@@ -18,7 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
- *      "PUT"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
+ *      "PUT"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "DELETE"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
  *     },
  *     normalizationContext={"groups"={"categories_read"}}
  * )

@@ -41,7 +41,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      "PUT"={
  *          "access_control" = "is_granted('ROLE_SUPERADMIN')",
  *          "normalization_context" = {
- *              "groups"={"users_post"}
+ *              "groups"={"user_post"}
  *          }
  *      },
  *      "DELETE"={
@@ -66,7 +66,7 @@ class User extends Person
     /**
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"users_post"})
+     * @Groups({"user_post", "admin_user_post"})
      */
     private $customer;
 
