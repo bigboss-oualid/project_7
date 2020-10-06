@@ -64,6 +64,7 @@ const authProvider = {
                 return Promise.reject(new Error('your are unauthorized'))
             }
         }
+        localStorage.removeItem('token');
         return Promise.reject()
     }
 };

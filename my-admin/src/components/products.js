@@ -8,10 +8,12 @@
 
 import React from "react";
 import { FieldGuesser, ListGuesser} from "@api-platform/admin";
+import {ResourceTitle} from '../helpers/resourceTitle';
+import {validateName, validateDescription, validateDetails, validateBarcode, validatePrice} from '../helpers/validates';
 import { useMediaQuery } from '@material-ui/core';
 import RichTextInput from 'ra-input-rich-text';
 import { makeStyles } from '@material-ui/core/styles';
-import { ReferenceField, SingleFieldList, ChipField, ImageField, TextField, Edit, Create, SimpleForm, SimpleList, ReferenceInput, SelectInput, TextInput, List, NumberInput, useNotify, useRefresh, useRedirect, required, minLength, maxLength,number, regex, email, ArrayField, Show, SimpleShowLayout, DateField, RichTextField, NumberField } from "react-admin";
+import { ReferenceField, SingleFieldList, ChipField, ImageField, TextField, Edit, Create, SimpleForm, SimpleList, ReferenceInput, SelectInput, TextInput, List, NumberInput, useNotify, useRefresh, useRedirect, ArrayField, Show, SimpleShowLayout, DateField, RichTextField, NumberField } from "react-admin";
 
 
 const useStyles = makeStyles({
@@ -28,24 +30,7 @@ const PictureField = props => {
 };
 
 
-
-
-const validateName = [required(),minLength(2), maxLength(25)];
-const validateDescription = [required(), minLength(15)];
-const validateDetails = [required(), minLength(10), maxLength(150)];
-const validateBarcode =  regex(/^\d{8,20}$/, 'Must be between 9 & 20 numbers');
-const validatePass =  regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}$/, 'Password must be at least 7 characters long and contain at least one digit, one specific character one upper & lower case letter');
-const validatePrice = [number(), required()];
-const validateEmail = email('email is required');
-
-
-const ResourceTitle = ({ record }) => {
-    return <span>Product {record ? `"${record.name}"` : ''}</span>;
-};
-
-
-
-export const ProductsList = (props) => {
+const ProductsList = (props) => {
     const isSmall = useMediaQuery(theme => theme.breakpoints.down('sm'));
     if (isSmall){
         return (
@@ -75,7 +60,7 @@ export const ProductsList = (props) => {
         );
     }
 };
-export const ProductShow = (props) => (
+const ProductShow = (props) => (
     <Show title={<ResourceTitle />} {...props}>
         <SimpleShowLayout>
             <TextField source="name" />
@@ -91,7 +76,7 @@ export const ProductShow = (props) => (
         </SimpleShowLayout>
     </Show>
 );
-export const ProductEdit = props => {
+const ProductEdit = props => {
     const notify = useNotify();
     const refresh = useRefresh();
     const redirect = useRedirect();
@@ -123,7 +108,7 @@ export const ProductEdit = props => {
     );
 };
 
-export const ProductCreate = props => (
+const ProductCreate = props => (
     <Create undoable={false} {...props}>
         <SimpleForm>
             <TextInput  source="name" />
@@ -137,3 +122,10 @@ export const ProductCreate = props => (
         </SimpleForm>
     </Create>
 );
+
+export {
+    ProductsList,
+    ProductShow,
+    ProductEdit,
+    ProductCreate
+};
