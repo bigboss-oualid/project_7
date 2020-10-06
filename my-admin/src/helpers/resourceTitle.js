@@ -9,5 +9,15 @@
 import React from "react";
 
 export const ResourceTitle = ({ record }) => {
-    return <span>{record['@type']} {record.name ? `: ${record.name}` : `: ${record.firstName} ${record.lastName}`}</span>;
+    let title = ": ";
+    if (record.name){
+        title += record.name;
+    } else if(record.username){
+        title += record.username;
+
+    }else if (record.firstName) {
+        title += record.firstName + " " + record.lastName;
+
+    }
+    return <span>{record['@type']} {title.toUpperCase()}</span>;
 };

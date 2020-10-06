@@ -23,7 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     itemOperations={
  *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
  *      "PUT"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
- *      "DELETE"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
+ *      "DELETE"={
+ *          "access_control"="is_granted('ROLE_SUPERADMIN') and object !== user",
+ *          "requirements"={"id"="\d+"}
+ *      }
  *     }
  * )
  */
@@ -43,7 +46,7 @@ class Customer extends Person implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_post", "users_read"})
+     * @Groups({"users_read", "user_post"})
      */
     private $username;
 

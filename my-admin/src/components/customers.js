@@ -11,16 +11,17 @@ import { FieldGuesser, ListGuesser} from "@api-platform/admin";
 import { useMediaQuery } from '@material-ui/core';
 import {ResourceTitle} from '../helpers/resourceTitle';
 import {validateName, validatePass, validateEmail} from '../helpers/validates';
-import { ChipField, EmailField, TextField, Edit, Create, SimpleForm, SimpleList,  TextInput, List, useNotify, useRefresh, useRedirect, Show, SimpleShowLayout, DateField} from "react-admin";
+import {PasswordInput, ChipField, EmailField, TextField, Edit, Create, SimpleForm, SimpleList,  TextInput, List, useNotify, useRefresh, useRedirect, Show, SimpleShowLayout, DateField} from "react-admin";
 
 
 const CustomerShow = (props) => (
     <Show title={<ResourceTitle />} {...props}>
         <SimpleShowLayout>
             <TextField label="URI" source="id" />
+            <TextField source="username" />
             <TextField source="firstName" />
             <TextField source="lastName" />
-            <TextField source="userName" />
+            <TextField source="username" />
             <ChipField source="roles" />
             <EmailField source="email" />
             <TextField source="company" />
@@ -34,7 +35,7 @@ const CustomerEdit = props => {
     const redirect = useRedirect();
 
     const onSuccess = ({ data }) => {
-        notify(`Changes to customer "${data.firstName}" saved`);
+        notify(`Changes to customer: ${data.username} saved`);
         redirect('/customers');
         refresh();
     };
@@ -47,9 +48,9 @@ const CustomerEdit = props => {
         <Edit undoable={false} title={<ResourceTitle />} onSuccess={onSuccess}  onFailure={onFailure} {...props}>
             <SimpleForm warnWhenUnsavedChanges >
                 <TextInput disabled label="URI" source="id" />
-                <TextInput  source="firstName" validate={validateName}  />
-                <TextInput  source="lastName" validate={validateName}  />
-                <TextInput type="password" source="password" validate={validatePass}  />
+                <TextInput disabled source="username" />
+                <TextInput source="firstName" validate={validateName}  />
+                <TextInput source="lastName" validate={validateName}  />
                 <TextInput type="email" source="email" validate={validateEmail}  />
                 <TextInput  source="company" validate={validateName}  />
             </SimpleForm>
@@ -64,7 +65,7 @@ const CustomerCreate = props => (
             <TextInput source="username" validate={validateName} />
             <TextInput type="email" source="email" validate={validateEmail} />
             <TextInput source="company" validate={validateName} />
-            <TextInput type="password" source="password" validate={validatePass}  />
+            <PasswordInput  source="password" validate={validatePass}  />
         </SimpleForm>
     </Create>
 );
