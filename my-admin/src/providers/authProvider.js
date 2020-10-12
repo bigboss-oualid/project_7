@@ -11,7 +11,7 @@ import jwtDecode from "jwt-decode";
 
 const authProvider = {
     login: ({ username, password }) =>  {
-        const request = new Request('http://localhost:8000/api/login_check', {
+        const request = new Request('http://localhost:8000/api/login', {
             method: 'POST',
             body: JSON.stringify({ username, password }),
             headers: new Headers({ 'Content-Type': 'application/json' }),
