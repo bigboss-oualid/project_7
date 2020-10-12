@@ -41,3 +41,7 @@ services:
     App\Services\Serializer\CustomerContextBuilder:
         decorates: 'api_platform.serializer.context_builder'
         arguments: ['@App\Services\Serializer\CustomerContextBuilder.inner']
+    'App\Swagger\SwaggerDecorator':
+        decorates: 'api_platform.swagger.normalizer.api_gateway'
+        arguments: ['@App\Swagger\SwaggerDecorator.inner']
+        autoconfigure: false
