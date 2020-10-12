@@ -1,7 +1,17 @@
 Feature: Manage Users
-  @createSchema @addUser
-  Scenario: Admin customer from company "TEST" Create a new user
+  @createSchema @adminGetUsers
+  Scenario: Get all users from SUPERADMIN
     Given I am authenticated as "admin"
+    When I add "Content-type" header equal to "application/ld+json"
+    And I add "Accept" header equal to "application/ld+json"
+    And I send a "GET" request to "/api/users?pagination=false"
+    Then the response status code should be 200
+    And the response should be in JSON
+    And the JSON node "hydra:member" has 75 elements
+
+  @addUser
+  Scenario: Customer from company "X" Create a new user
+    Given I am authenticated as "customerX"
     When I add "Content-type" header equal to "application/ld+json"
     And I add "Accept" header equal to "application/ld+json"
     And I send a "POST" request to "/api/users" with body:
@@ -16,7 +26,7 @@ Feature: Manage Users
     """
     Then the response status code should be 201
     And the response should be in JSON
-    And the JSON node "company" should be equal to "TEST"
+    And the JSON node "company" should be equal to "X"
     And the JSON matches expected template:
     """
     {
@@ -24,18 +34,17 @@ Feature: Manage Users
       "@id":"@string@",
       "@type":"User",
       "id":@integer@,
-      "customer":@json@,
       "firstName":"test",
       "lastName":"Test",
       "email":"test@bilemo.de",
-      "company":"TEST",
+      "company":"X",
       "createdAt":"@string@.isDateTime()"
     }
     """
 
   @addUser
   Scenario: Read recently added user
-    Given I am authenticated as "admin"
+    Given I am authenticated as "customerX"
     And I add "Accept" header equal to "application/ld+json"
     And I send a "GET" request to "/api/users/76"
     Then the response status code should be 200
@@ -47,7 +56,6 @@ Feature: Manage Users
       "@id":"/api/users/76",
       "@type":"User",
       "id":76,
-      "customer":{"username":"admin","roles":["ROLE_ADMIN"],"firstName":"@string@","lastName":"@string@","email":"@string@.isEmail()","company":"@string@","createdAt":"@string@.isDateTime()"},
       "firstName":"test",
       "lastName":"Test",
       "email":"test@bilemo.de",
@@ -58,7 +66,7 @@ Feature: Manage Users
 
   @addUser
   Scenario: Throws an error when post user is invalid
-    Given I am authenticated as "admin"
+    Given I am authenticated as "customerX"
     When I add "Content-type" header equal to "application/ld+json"
     And I add "Accept" header equal to "application/ld+json"
     And I send a "POST" request to "/api/users" with body:
@@ -102,7 +110,7 @@ Feature: Manage Users
 
   @invalidUser
   Scenario: Throws error when read invalid user
-    Given I am authenticated as "admin"
+    Given I am authenticated as "customerX"
     And I add "Accept" header equal to "application/ld+json"
     When I send a "GET" request to "/api/users/20"
     Then the response status code should be 404
@@ -127,7 +135,7 @@ Feature: Manage Users
   @createSchema @deleteUser
   Scenario: Delete user
     When I add "Content-type" header equal to "application/ld+json"
-    Given I am authenticated as "admin"
+    Given I am authenticated as "customerX"
     And I add "Accept" header equal to "application/ld+json"
     And I send a "DELETE" request to "/api/users/1"
     Then the response status code should be 204

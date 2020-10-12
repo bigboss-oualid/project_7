@@ -23,6 +23,7 @@ class FeatureContext extends RestContext
     /*** used Users inside these tests */
     const USERS = [
         'admin' => 'demo',
+        'customerX' => 'demo',
     ];
     const AUTH_URL = '/api/login_check';
 
@@ -73,7 +74,6 @@ class FeatureContext extends RestContext
             sprintf(self::AUTH_JSON, $username, self::USERS[$username])
         );
 
-
         $json = json_decode($this->request->getContent(), true);
         //Make sure the token was returned
         $this->assertTrue(isset($json['token']));
@@ -95,8 +95,20 @@ class FeatureContext extends RestContext
         $this->assertTrue($this->matcher->match($actual, $json->getRaw()));
     }
 
+    /**
+     * @Then the JSON node :type has :numberOfElements elements
+     */
+    public function theJsonNodeHasElements(string $key, int $numberOfElements)
+    {
+        $actual = $this->request->getContent();
+        //Convert content to array and count number of users
+        $users = count(json_decode($actual, true)[$key]);
 
-
+        // Make sure the the json key exist
+        $this->assertContains($key, $actual);
+        // Make sure the returned number of resources is equal to excepted number
+        $this->assertTrue($this->matcher->match($users, $numberOfElements));
+    }
 
     /**
      * @BeforeScenario @createSchema
