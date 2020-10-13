@@ -59,7 +59,6 @@ const authProvider = {
             if (role === 'ROLE_SUPERADMIN') {
                 return Promise.resolve(role)
             } else {
-
                 localStorage.removeItem('token');
                 return Promise.reject(new Error('your are unauthorized'))
             }

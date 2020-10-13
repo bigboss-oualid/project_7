@@ -17,14 +17,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("username", message="A user already exists with this username")
  * @ApiResource(
  *     collectionOperations={
- *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
- *      "POST"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
+ *      "GET"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "POST"={"security" = "is_granted('ROLE_SUPERADMIN')"}
  *     },
  *     itemOperations={
- *      "GET"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
- *      "PUT"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "GET"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "PUT"={"security" = "is_granted('ROLE_SUPERADMIN')"},
  *      "DELETE"={
- *          "access_control"="is_granted('ROLE_SUPERADMIN') and object !== user",
+ *          "security"="is_granted('ROLE_SUPERADMIN') and object !== user",
  *          "requirements"={"id"="\d+"}
  *      }
  *     }

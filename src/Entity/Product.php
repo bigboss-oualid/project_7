@@ -20,15 +20,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={
  *      "GET"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *          "normalization_context"={"groups"={"products_read"}}
  *      },
- *      "POST"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
+ *      "POST"={"security" = "is_granted('ROLE_SUPERADMIN')"}
  *     },
  *     itemOperations={
- *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"},
- *      "PUT"={"access_control" = "is_granted('ROLE_SUPERADMIN')"},
- *      "DELETE"={"access_control" = "is_granted('ROLE_SUPERADMIN')"}
+ *      "GET"={"security" = "is_granted('IS_AUTHENTICATED_FULLY')"},
+ *      "PUT"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "DELETE"={"security" = "is_granted('ROLE_SUPERADMIN')"}
  *     }
  * )
  * @ApiFilter(SearchFilter::class, properties={"name":"partial", "details":"partial", "price":"start"})

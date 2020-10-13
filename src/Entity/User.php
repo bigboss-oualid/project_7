@@ -15,13 +15,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={
  *      "GET"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *          "normalization_context" = {
  *              "groups"={"users_read"}
  *          }
  *      },
  *      "POST"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *          "denormalization_context" = {
  *              "groups"={"user_post"}
  *          },
@@ -32,19 +32,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *      "GET"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *          "normalization_context" = {
  *              "groups"={"users_read"}
  *          }
  *      },
  *      "PUT"={
- *          "access_control" = "is_granted('ROLE_SUPERADMIN')",
+ *          "security" = "is_granted('ROLE_SUPERADMIN')",
  *          "normalization_context" = {
  *              "groups"={"user_post"}
  *          }
  *      },
  *      "DELETE"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY') and object.owner === user",
  *          "requirements"={"id"="\d+"}
  *      }
  *     }
