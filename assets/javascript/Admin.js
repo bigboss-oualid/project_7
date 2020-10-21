@@ -14,9 +14,8 @@ import {UserCreate, UserEdit, UserShow, UsersList} from "./components/users";
 import {CustomerCreate, CustomerEdit, CustomerShow, CustomersList} from "./components/customers";
 import {CategoryCreate, CategoryEdit,CategoryShow, CategoriesList} from "./components/categories";
 import {ImageEdit, ImageShow, ImagesList, ImageCreate} from "./components/images";
+import { API_URL } from "./config";
 
-
-const apiUrl = "http://localhost:8000/api";
 const fetchHeaders = { Authorization: `Bearer ${window.localStorage.getItem("token")}` };
 const fetchHydra = (url, options = {}) => baseFetchHydra(url, {
     ...options,
@@ -42,14 +41,14 @@ const apiDocumentationParser = entrypoint => parseHydraDocumentation(entrypoint,
     );
 
 
-const dataProvider = baseHydraDataProvider(apiUrl, fetchHydra, apiDocumentationParser,true);
+const dataProvider = baseHydraDataProvider(API_URL, fetchHydra, apiDocumentationParser,true);
 
 export default () => (
     <HydraAdmin
         dashboard={ Dashboard }
         dataProvider={ dataProvider }
         authProvider={ authProvider }
-        entrypoint={ apiUrl }>
+        entrypoint={ API_URL }>
         <ResourceGuesser
             name="products"
             list={ProductsList}

@@ -8,10 +8,11 @@
 
 
 import jwtDecode from "jwt-decode";
+import { LOGIN_API } from "../config";
 
 const authProvider = {
     login: ({ username, password }) =>  {
-        const request = new Request('http://localhost:8000/api/login', {
+        const request = new Request(LOGIN_API, {
             method: 'POST',
             body: JSON.stringify({ username, password }),
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -27,7 +28,6 @@ const authProvider = {
                 const decodedToken = jwtDecode(token);
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', decodedToken.roles);
-                localStorage.setItem('informations', decodedToken);
             });
     },
     getPermissions: () => {
@@ -35,19 +35,20 @@ const authProvider = {
         return role ? Promise.resolve(role) : Promise.reject();
     },
     getIdentity: () => {
-        const { userName, firstName, lastName} = JSON.parse(localStorage.getItem('informations'));
-        return { userName, firstName, lastName };
+        const token = localStorage.getItem('token');
+        const {username, lastName, firstName} = jwtDecode(token);
+        return {username, lastName, firstName};
     },
     logout: () => {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
-        localStorage.removeItem('informations');
         return Promise.resolve();
     },
     checkError: (error) => {
         const status = error.status;
         if (status === 401 || status === 403) {
             localStorage.removeItem('token');
+            localStorage.removeItem('role');
             return Promise.reject();
         }
         return Promise.resolve();
@@ -56,14 +57,17 @@ const authProvider = {
         const token = localStorage.getItem('token');
         const role = localStorage.getItem('role');
         if (token) {
-            if (role === 'ROLE_SUPERADMIN') {
-                return Promise.resolve(role)
+            const {exp: expiration} = jwtDecode(token);
+            if (role === 'ROLE_SUPERADMIN' && expiration * 1000 > new Date().getTime()) {
+                return Promise.resolve(role);
             } else {
                 localStorage.removeItem('token');
-                return Promise.reject(new Error('your are unauthorized'))
+                localStorage.removeItem('role');
+                return Promise.reject(new Error('your are unauthorized'));
             }
         }
         localStorage.removeItem('token');
+        localStorage.removeItem('role');
         return Promise.reject()
     }
 };
