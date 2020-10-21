@@ -1,0 +1,52 @@
+{
+    "dependencies": {
+        "@api-platform/admin": "^2.2.3",
+        "@material-ui/core": "latest",
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^9.3.2",
+        "@testing-library/user-event": "^7.1.2",
+        "dotenv": "^8.2.0",
+        "jquery": "^3.5.1",
+        "jwt-decode": "^3.0.0-beta.2",
+        "ra-input-rich-text": "^3.9.0",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-scripts": "3.4.3"
+    },
+    "devDependencies": {
+        "@api-platform/api-doc-parser": "latest",
+        "@babel/preset-react": "7.0.0",
+        "@material-ui/icons": "latest",
+        "@symfony/webpack-encore": "^0.31.0",
+        "core-js": "^3.0.0",
+        "react-admin": "latest",
+        "react-router-dom": "latest",
+        "regenerator-runtime": "^0.13.2",
+        "webpack-notifier": "^1.6.0"
+    },
+    "license": "UNLICENSED",
+    "name": "my-admin",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev-server": "encore dev-server --port 8080",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
+}
