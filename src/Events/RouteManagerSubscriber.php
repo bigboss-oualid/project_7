@@ -45,9 +45,9 @@ class RouteManagerSubscriber implements EventSubscriberInterface
                     ),
                 ]
             );
-            $e = new ValidationException($violations);
+            $exception = new ValidationException($violations);
 
-            $exceptionEvent->setThrowable($e);
+            $exceptionEvent->setThrowable($exception);
         }
     }
 }

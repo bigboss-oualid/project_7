@@ -22,7 +22,7 @@ class JwtCreatedSubscriber
         $data['firstName'] = $customer->getFirstName();
         $data['lastName'] = $customer->getLastName();
         $data['roles'] = $customer->getRoles();
-
+        // Add data to JSON Web Token
         $event->setData($data);
     }
 }

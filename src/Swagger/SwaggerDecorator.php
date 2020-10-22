@@ -87,7 +87,7 @@ final class SwaggerDecorator implements NormalizerInterface
             ],
         ];
 
-        $tokenDocumentation = [
+        return [
             'paths' => [
                 '/api/login' => [
                     'post' => [
@@ -126,8 +126,6 @@ final class SwaggerDecorator implements NormalizerInterface
                 ],
             ],
         ];
-
-        return $tokenDocumentation;
     }
 
     /**
