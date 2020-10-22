@@ -16,4 +16,4 @@ setTimeout(function(){
     let svgs = document.getElementsByTagName('svg');
     svgs[1].replaceWith(img);
 
-},1000);
+},1500);
