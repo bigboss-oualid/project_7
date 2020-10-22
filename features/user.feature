@@ -134,8 +134,8 @@ Feature: Manage Users
 
   @createSchema @deleteUser
   Scenario: Delete user
-    When I add "Content-type" header equal to "application/ld+json"
     Given I am authenticated as "customerX"
+    When I add "Content-type" header equal to "application/ld+json"
     And I add "Accept" header equal to "application/ld+json"
     And I send a "DELETE" request to "/api/users/1"
     Then the response status code should be 204

@@ -44,7 +44,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          }
  *      },
  *      "DELETE"={
- *          "security" = "is_granted('IS_AUTHENTICATED_FULLY') and object.owner === user",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user",
  *          "requirements"={"id"="\d+"}
  *      }
  *     }

@@ -25,7 +25,7 @@ class FeatureContext extends RestContext
         'admin' => 'demo',
         'customerX' => 'demo',
     ];
-    const AUTH_URL = '/api/login_check';
+    const AUTH_URL = '/api/login';
 
     /*** Define how JSON should look like */
     const AUTH_JSON = '
