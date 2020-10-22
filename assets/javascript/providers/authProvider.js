@@ -58,12 +58,15 @@ const authProvider = {
         const role = localStorage.getItem('role');
         if (token) {
             const {exp: expiration} = jwtDecode(token);
-            if (role === 'ROLE_SUPERADMIN' && expiration * 1000 > new Date().getTime()) {
-                return Promise.resolve(role);
-            } else {
-                localStorage.removeItem('token');
-                localStorage.removeItem('role');
-                return Promise.reject(new Error('your are unauthorized'));
+            if (expiration * 1000 > new Date().getTime()) {
+                if (role === 'ROLE_SUPERADMIN') {
+
+                    return Promise.resolve(role);
+                } else {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('role');
+                    return Promise.reject(new Error('your are not authorized'));
+                }
             }
         }
         localStorage.removeItem('token');

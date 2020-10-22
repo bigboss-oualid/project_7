@@ -92,12 +92,6 @@ class Product
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"products_read"})
-     */
-    private $updatedAt;
-
-    /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="product", orphanRemoval=true)
      * @Groups({"products_read"})
      */
@@ -200,18 +194,6 @@ class Product
     public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
