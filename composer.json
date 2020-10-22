@@ -82,6 +82,10 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "compile": [
+            "cp ./public/images/logo-header.svg ./public/bundles/apiplatform/logo-header.svg",
+            "cp ./public/images/webby.png ./public/bundles/apiplatform/webby.png"
         ]
     },
     "conflict": {
