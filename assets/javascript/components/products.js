@@ -55,7 +55,7 @@ const ProductsList = (props) => {
                         <PictureField source="url" />
                     </SingleFieldList>
                 </ArrayField>
-                <ChipField label="category" source="category.name" />
+                <ChipField label="Category" source="category.name" />
             </ListGuesser>
         );
     }
@@ -94,13 +94,13 @@ const ProductEdit = props => {
     return (
         <Edit undoable={false} title={<ResourceTitle />} onSuccess={onSuccess}  onFailure={onFailure} {...props}>
             <SimpleForm warnWhenUnsavedChanges>
-                <TextInput disabled label="uri" source="id" />
+                <TextInput disabled label="URI" source="id" />
                 <TextInput  source="name" validate={validateName}  />
                 <RichTextInput  source="description" validate={validateDescription} />
                 <RichTextInput  source="details" validate={validateDetails} />
                 <TextInput  source="barcode" validate={validateBarcode} />
                 <NumberInput  source="price" validate={validatePrice} />
-                <ReferenceInput  label="Category" source="category" reference="categories" >
+                <ReferenceInput  label="Category" source="category" reference="categories" validate={false}>
                     <SelectInput optionText="name" optionValue="id" />
                 </ReferenceInput>
             </SimpleForm>
@@ -111,13 +111,13 @@ const ProductEdit = props => {
 const ProductCreate = props => (
     <Create undoable={false} {...props}>
         <SimpleForm>
-            <TextInput  source="name" />
-            <RichTextInput  source="description" />
-            <RichTextInput  source="details" />
-            <TextInput  source="barcode" />
-            <NumberInput  source="price" />
-            <ReferenceInput label="Category" source="productId" reference="categories">
-                <SelectInput  optionText="name" optionValue="category_id"/>
+            <TextInput  source="name" validate={validateName}  />
+            <RichTextInput  source="description" validate={validateDescription}/>
+            <RichTextInput  source="details"  validate={validateDetails}/>
+            <TextInput  source="barcode" validate={validateBarcode}/>
+            <NumberInput  source="price" validate={validatePrice}/>
+            <ReferenceInput label="Category" source="category" reference="categories">
+                <SelectInput  optionText="name" optionValue="id"/>
             </ReferenceInput>
         </SimpleForm>
     </Create>

@@ -11,7 +11,7 @@ import React from "react";
 import { FieldGuesser, ListGuesser} from "@api-platform/admin";
 import { useMediaQuery } from '@material-ui/core';
 import {ResourceTitle} from '../helpers/resourceTitle';
-import {validateName} from '../helpers/validates';
+import {validateName, validateUrl} from '../helpers/validates';
 import { ImageField, ReferenceField, TextField, Edit, SimpleForm, TextInput, useNotify, useRefresh, useRedirect, Show, SimpleShowLayout, Create, ReferenceInput, SelectInput } from "react-admin";
 
 
@@ -31,7 +31,7 @@ const ImageShow = (props) => (
             <TextField label="URI" source="id"/>
             <TextField source="name" />
             <TextField source="url" />
-            <ImageField label="view" source="url" />
+            <ImageField label="View" source="url" />
         </SimpleShowLayout>
     </Show>
 );
@@ -64,14 +64,14 @@ const ImagesList = (props) => {
     if (isSmall){
         return (
             <ListGuesser {...props}>
-                <PictureField label="view" source="url" />
+                <PictureField label="View" source="url" />
             </ListGuesser>
         );
     } else {
         return (
             <ListGuesser {...props}>
                 <FieldGuesser source="name" />
-                <PictureField label="view" source="url" />
+                <PictureField label="View" source="url" />
                 <ReferenceField label="Product name" source="product" reference="products">
                     <TextField source="name" />
                 </ReferenceField>
@@ -83,8 +83,8 @@ const ImagesList = (props) => {
 const ImageCreate = props => (
     <Create undoable={false} {...props}>
         <SimpleForm>
-            <TextInput  source="name" />
-            <TextInput  label="path" source="url" />
+            <TextInput  source="name" validate={validateName}/>
+            <TextInput  label="Path" source="url" validate={validateUrl}/>
             <ReferenceInput label="Product" source="product" reference="products">
                 <SelectInput  optionText="name" optionValue="id"/>
             </ReferenceInput>

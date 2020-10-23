@@ -74,7 +74,7 @@ const CategoriesList = (props) => {
 const CategoryCreate = props => (
     <Create undoable={false} {...props}>
         <SimpleForm>
-            <TextInput  source="name" />
+            <TextInput  source="name"  validate={validateName} />
         </SimpleForm>
     </Create>
 );

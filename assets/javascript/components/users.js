@@ -21,7 +21,7 @@ const UserShow = (props) => (
             <TextField source="firstName" />
             <TextField source="lastName" />
             <EmailField source="email" />
-            <ChipField label="Added from" source="customer.username" />
+            <ChipField label="Added from" source="customer.firstName" />
             <TextField source="company" />
             <DateField source="createdAt" />
         </SimpleShowLayout>
@@ -86,6 +86,7 @@ const UsersList = (props) => {
                 <FieldGuesser source="lastName" />
                 <EmailField source="email" />
                 <ChipField source="company" />
+                <ChipField label="Added from" source="customer.firstName" />
                 <FieldGuesser source="createdAt" />
             </ListGuesser>
         );
