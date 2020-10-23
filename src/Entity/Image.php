@@ -16,7 +16,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *      "GET"={"security" = "is_granted('ROLE_SUPERADMIN')"},
- *      "PUT"={"security" = "is_granted('ROLE_SUPERADMIN')"}
+ *      "PUT"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "DELETE"={"security" = "is_granted('ROLE_SUPERADMIN')"}
  *     }
  * )
  */
