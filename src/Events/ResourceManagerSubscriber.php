@@ -31,19 +31,19 @@ class ResourceManagerSubscriber implements EventSubscriberInterface
         if (!$exceptionEvent->getThrowable() instanceof NotFoundHttpException) {
             return;
         }
-        //Save Resource name and id in index 2 & 3 of $uri[]
         $uri = $request->getRequestUri();
-        $dividedUri = explode('/', $uri);
+        $array = explode('/', $uri);
+        array_shift($array);
+        // Remove empty array values & save name&id of resource
+        $dividedUri = array_filter($array, 'strlen');
 
-        //check if uri exist in route
-        if (!isset($dividedUri[2])) {
+        // Check if uri exist in route
+        if (!isset($dividedUri[1])) {
             return;
         }
-        //check if resource not found
-        if (
-            ('products' === $dividedUri[2] || 'users' === $dividedUri[2])
-            && (4 === count($dividedUri) || '' === $dividedUri[4])
-        ) {
+
+        // Check if resource not found
+        if (in_array($dividedUri[1], ['products', 'users']) && !isset($dividedUri[3])) {
             $exceptionEvent->setThrowable(
                 new NotFoundHttpException($this->createMessage($dividedUri), null, 404)
             );
@@ -59,11 +59,11 @@ class ResourceManagerSubscriber implements EventSubscriberInterface
      */
     private function createMessage(array $dividedUri): string
     {
-        $entity = substr($dividedUri[2], 0, -1);
-        $id = $dividedUri[3];
-        //check if id is numeric or string
-        return (is_numeric($id)) ?
-            sprintf('The %s with the given id: \'%s\', does not exist.', $entity, $id)
-            : sprintf('The given id: \'%s\' must be number', $id);
+        $entity = substr($dividedUri[1], 0, -1);
+        $entityId = $dividedUri[2];
+        // Check if id is numeric or string
+        return (is_numeric($entityId)) ?
+            sprintf('The %s with the given id: \'%s\', does not exist.', $entity, $entityId)
+            : sprintf('The given id: \'%s\' must be number', $entityId);
     }
 }
