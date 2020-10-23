@@ -44,7 +44,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          }
  *      },
  *      "DELETE"={
- *          "security" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user",
+ *          "security" = "(is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user) or is_granted('ROLE_SUPERADMIN')"  ,
  *          "requirements"={"id"="\d+"}
  *      }
  *     }
@@ -65,7 +65,7 @@ class User extends Person
     /**
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"user_post", "admin_user_post"})
+     * @Groups({"user_post", "admin_user_read"})
      */
     private $customer;
 
