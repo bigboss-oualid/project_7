@@ -23,9 +23,6 @@ api_platform:
     exception_to_status:
         App\Exception\InvalidBodyException: 415
     http_cache:
-        invalidation:
-            enabled: true
-            #varnish_urls: ['%env(VARNISH_URL)%']
         # Automatically generate etags for API responses.
         etag: true
         # Default value for the response max age.
