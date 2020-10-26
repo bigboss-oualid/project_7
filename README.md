@@ -8,8 +8,8 @@
 ![Symfony](https://img.shields.io/badge/Symfony-v4.4-45CB3E)
 ![Project](https://img.shields.io/w3c-validation/html?preset=HTML%2C%20SVG%201.1%2C%20MathML%203.0&targetUrl=https%3A%2F%2Fwww.bilemo.it-bigboss.de)
 [![Repo Size](https://img.shields.io/github/repo-size/bigboss-oualid/project_7?label=Repo+Size)](https://github.com/bigboss-oualid/project_7/tree/master)
-![request](https://img.shields.io/github/issues-pr-closed/bigboss-oualid/project_7?color=33FFCC)
-![Issues](https://img.shields.io/github/issues-closed/bigboss-oualid/project_7?logo=logo)
+[![request](https://img.shields.io/github/issues-pr-closed/bigboss-oualid/project_7?color=33FFCC)](https://github.com/bigboss-oualid/project_7/pulls?q=is%3Apr+is%3Aclosed)
+[![Issues](https://img.shields.io/github/issues-closed/bigboss-oualid/project_7?logo=logo)](https://github.com/bigboss-oualid/project_7/issues?q=is%3Aissue+is%3Aclosed)
 
 Development of a mobile phone showcase for a company that offers access to its catalog via an API (Application Programming Interface) for all platforms that require it. So these are exclusively B2B sales (business to business).
 We are going to expose a number of APIs to enable the applications of other web platforms to perform operations.
@@ -43,8 +43,7 @@ Download & install all prerequisites tools
 
 ##### Set up the Project
 ###### Installation
-1. Download the project [![Download](https://img.shields.io/badge/-Here-D3D345)](https://codeload.github
-.com/bigboss-oualid/project_7/zip/master "click to start download"), or clone the repository by executing the command line from your 
+1. Download the project [![Download](https://img.shields.io/badge/-Here-D3D345)](https://codeload.github.com/bigboss-oualid/project_7/zip/master "click to start download"), or clone the repository by executing the command line from your 
 terminal.
 ```shell
 $ git clone https://github.com/bigboss-oualid/project_7.git
