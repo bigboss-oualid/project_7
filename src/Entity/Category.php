@@ -18,7 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *      "GET"={"security" = "is_granted('ROLE_SUPERADMIN')"},
- *      "PUT"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "PUT"={
+ *          "security" = "is_granted('ROLE_SUPERADMIN')",
+ *          "denormalization_context" = {
+ *              "groups"={"category_put"}
+ *          }
+ *      },
  *      "DELETE"={"security" = "is_granted('ROLE_SUPERADMIN')"}
  *     },
  *     normalizationContext={"groups"={"categories_read"}}
@@ -35,7 +40,7 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"products_read","categories_read"})
+     * @Groups({"products_read","categories_read", "category_put"})
      */
     private $name;
 
