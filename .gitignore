@@ -4,6 +4,7 @@
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/migrations/
 /src/.preload.php
 /var/
 /vendor/
@@ -39,4 +40,3 @@ npm-debug.log
 yarn.lock
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
-
