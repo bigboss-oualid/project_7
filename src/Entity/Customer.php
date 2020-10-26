@@ -2,13 +2,21 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ * @ApiResource(
+ *     collectionOperations={},
+ *     itemOperations={"GET"}
+ * )
+ * @UniqueEntity("username", message="A user already exists with this username")
  */
 class Customer extends Person
 {
@@ -26,6 +34,7 @@ class Customer extends Person
 
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="customer")
+     * @ApiSubresource()
      */
     private $users;
 

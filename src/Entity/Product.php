@@ -2,14 +2,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\ProductRepository;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
+ * @ApiResource(
+ *     collectionOperations={"GET"},
+ *     itemOperations={"GET"},
+ *     normalizationContext={"groups"={"products_read"}}
+ * )
+ * @ApiFilter(SearchFilter::class, properties={"name":"partial", "details":"partial", "price":"start"})
+ * @ApiFilter(OrderFilter::class, properties={"price", "createdAt", "quantity"})
  */
 class Product
 {
@@ -17,56 +29,67 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"products_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"products_read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"products_read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"products_read"})
      */
     private $details;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"products_read"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"products_read"})
      */
     private $quantity;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"products_read"})
      */
     private $barcode;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"products_read"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"products_read"})
      */
     private $updatedAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="product", orphanRemoval=true)
+     * @Groups({"products_read"})
      */
     private $images;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
+     * @Groups({"products_read"})
      */
     private $category;
 
