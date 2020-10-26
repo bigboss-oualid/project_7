@@ -12,8 +12,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  * @ApiResource(
- *     collectionOperations={"GET"},
- *     itemOperations={"GET"}
+ *     collectionOperations={
+ *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}
+ *     },
+ *     itemOperations={
+ *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}
+ *     }
  * )
  */
 class Category

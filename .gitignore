@@ -22,3 +22,7 @@
 /.idea/
 /.php_cs.dist
 /phpcs.xml.dist
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
