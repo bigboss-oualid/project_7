@@ -41,6 +41,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          "security" = "is_granted('ROLE_SUPERADMIN')",
  *          "normalization_context" = {
  *              "groups"={"user_post"}
+ *          },
+ *          "denormalization_context" = {
+ *              "groups"={"users_read"}
  *          }
  *      },
  *      "DELETE"={
