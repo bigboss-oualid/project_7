@@ -49,9 +49,9 @@ class AuthoredEntitySubscriber implements EventSubscriberInterface
         }
         // Allow logged person with SuperAdmin to choose user's creator
         if (in_array(Customer::ROLE_SUPERADMIN, $customer->getRoles()) && !empty($entity->getCustomer())) {
-            $entity->setCompany($entity->getCustomer()->getCompany());
-            return;
+            $customer = $entity->getCustomer();
         }
+
         /* @var User $entity*/
         $entity->setCustomer($customer)
             ->setCompany($customer->getCompany());
