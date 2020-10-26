@@ -20,27 +20,29 @@ final class SwaggerDecorator implements NormalizerInterface
      */
     private $docs;
 
+    const UNUSED_PATHS = [['path' => '/api/categories'], ['path' => '/api/categories/{id}'], ['path' => '/api/customers'],
+        ['path' => '/api/customers/{id}'], ['path' => '/api/images'], ['path' => '/api/images/{id}'], ['path' => '/api/users/{id}',
+            'method' => 'put', ], ['path' => '/api/products', 'method' => 'post'], ['path' => '/api/products/{id}', 'method' => 'put'],
+        ['path' => '/api/products/{id}', 'method' => 'delete'], ];
+    const UNUSED_SCHEMAS = ['Customer:jsonld', 'Customer', 'Customer:jsonld-user_post', 'Category', 'Category-categories_read', 'Category:jsonld', 'Category:jsonld-categories_read', 'Image', 'Image:jsonld'];
+
     public function __construct(NormalizerInterface $decorated)
     {
         $this->decorated = $decorated;
     }
 
-    public function normalize($object, $format = null, array $context = [])
+    /***
+     * {@inheritdoc }
+     */
+    public function normalize($object, $format = null, array $context = []): array
     {
         $defaultsDocs = $this->decorated->normalize($object, $format, $context);
 
-        // Disable endpoints from api-docs.
-        unset($defaultsDocs['paths']['/api/categories']);
-        unset($defaultsDocs['paths']['/api/categories/{id}']);
-        unset($defaultsDocs['paths']['/api/customers']);
-        unset($defaultsDocs['paths']['/api/customers/{id}']);
-        unset($defaultsDocs['paths']['/api/images']);
-        unset($defaultsDocs['paths']['/api/images/{id}']);
-        unset($defaultsDocs['paths']['/api/users/{id}']['put']);
-        unset($defaultsDocs['paths']['/api/products']['post']);
-        unset($defaultsDocs['paths']['/api/products/{id}']['put']);
-        unset($defaultsDocs['paths']['/api/products/{id}']['delete']);
+        // Disable unused endpoints & their schemas from api-docs.
+        $this->unsetElements($defaultsDocs);
 
+        // Remove customer input from api docs
+        unset($defaultsDocs['components']['schemas']['User:jsonld-user_post']['properties']['customer']);
         // Add Error to POST api/users
         $defaultsDocs['paths']['/api/users']['post']['responses'][415] = [
             'description' => 'The Body is not a valid json format <br/> The Body is empty',
@@ -53,15 +55,34 @@ final class SwaggerDecorator implements NormalizerInterface
         return array_merge_recursive($this->docs, $defaultsDocs);
     }
 
+    /***
+     * {@inheritdoc }
+     */
     public function supportsNormalization($data, $format = null)
     {
         return $this->decorated->supportsNormalization($data, $format);
     }
 
+    private function unsetElements(array &$docs): void
+    {
+        foreach (self::UNUSED_SCHEMAS as $schema) {
+            unset($docs['components']['schemas'][$schema]);
+        }
+        foreach (self::UNUSED_PATHS as $path) {
+            if (!empty($path['method'])) {
+                unset($docs['paths'][$path['path']][$path['method']]);
+            } else {
+                unset($docs['paths'][$path['path']]);
+            }
+        }
+    }
+
     /**
      * @param $docs
+     *
+     *@return array
      */
-    private function retrieveJwt($docs): array
+    private function retrieveJwt(array $docs): array
     {
         $docs['components']['schemas']['Token'] = [
             'type' => 'object',
@@ -135,9 +156,9 @@ final class SwaggerDecorator implements NormalizerInterface
      */
     private function getDescription(array $docs): array
     {
-        $docs['info']['description'] = '<h2>Description »</h2>
+        $docs['info']['description'] = '<h2>Description:</h2>
                 <p>BileMo is a company offering a variety of premium mobile phones. through our API you can get the list of your users or our product, and of course you will be also able to add user or delete users.</p>
-            <h2>Authentication »</h2>
+            <h2>Authentication:</h2>
                 <p>To use our API you will need a token so that we can identify you in all the requests. All requests to our API need a <strong>Bearer Token</strong> for authorization.</p>
             <h4>How to generate a token?</h4>
             <p>You will need to generate a token for your Handy user. The customer must have the company role_user in order to have full permission to all the endpoints. You must log in to the web portal: 

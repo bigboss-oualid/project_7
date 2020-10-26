@@ -126,8 +126,7 @@ $ symfony server:start [-d]
 username   | password | role            | endpoints access
 ---------- | -------- | --------------- | --------
  admin     |   demo   | SUPERADMIN | All APIs
- customerx |   demo   | USER       | *```GET /api/products```*  *```GET /api/products/{id}```*   *```GET 
- /api/users```*  *```GET /api/users/{id}```*  *```POST /api/users```*  *```DELETE /api/users/{id}```*
+ customerx |   demo   | USER       | *```GET /api/products```*  *```GET /api/products/{id}```*   *```GET /api/users```*  *```GET /api/users/{id}```*  *```POST /api/users```*  *```DELETE /api/users/{id}```*
  
 ### Run Tests
 * ##### PHPUnit
