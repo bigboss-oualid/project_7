@@ -39,11 +39,9 @@ final class InvalidBodySubscriber implements EventSubscriberInterface
         if ($request->attributes->get('exception') instanceof NotEncodableValueException) {
             //check if request body is not not empty
             if (strlen($request->getContent()) > 0) {
-                $errorMessage = 'The Body format is not a valid json format';
-            } else {
-                $errorMessage = "The body can't be empty";
+                throw new InvalidBodyException('The Body format is not a valid json format');
             }
-            throw new InvalidBodyException($errorMessage);
+            throw new InvalidBodyException("The body can't be empty");
         }
     }
 }

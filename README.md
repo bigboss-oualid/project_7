@@ -1,6 +1,7 @@
 # BileMo Documentation 
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/764500765a42661592a4/maintainability)](https://codeclimate.com/github/bigboss-oualid/project_7/maintainability)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/07b0e710497147f1a9457e5868b2f1e6)](https://www.codacy.com/gh/bigboss-oualid/project_7/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=bigboss-oualid/project_7&amp;utm_campaign=Badge_Grade)
 
 ## About the project
 
