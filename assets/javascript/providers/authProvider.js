@@ -28,6 +28,9 @@ const authProvider = {
                 const decodedToken = jwtDecode(token);
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', decodedToken.roles);
+                if (localStorage.getItem('role') !== 'ROLE_SUPERADMIN') {
+                    return Promise.reject(new Error('Unauthorized'));
+                }
             });
     },
     getPermissions: () => {
@@ -55,23 +58,15 @@ const authProvider = {
     },
     checkAuth: () => {
         const token = localStorage.getItem('token');
-        const role = localStorage.getItem('role');
+
         if (token) {
             const {exp: expiration} = jwtDecode(token);
             if (expiration * 1000 > new Date().getTime()) {
-                if (role === 'ROLE_SUPERADMIN') {
-
-                    return Promise.resolve(role);
-                } else {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('role');
-                    return Promise.reject(new Error('your are not authorized'));
-                }
+                return Promise.resolve();
             }
+            return Promise.reject(new Error('Your token is expired'));
         }
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
-        return Promise.reject()
+        return Promise.reject();
     }
 };
 
