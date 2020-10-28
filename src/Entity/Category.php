@@ -13,11 +13,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  * @ApiResource(
  *     collectionOperations={
- *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}
+ *      "GET"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "POST"={"security" = "is_granted('ROLE_SUPERADMIN')"}
  *     },
  *     itemOperations={
- *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}
- *     }
+ *      "GET"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "PUT"={
+ *          "security" = "is_granted('ROLE_SUPERADMIN')",
+ *          "denormalization_context" = {
+ *              "groups"={"category_put"}
+ *          }
+ *      },
+ *      "DELETE"={"security" = "is_granted('ROLE_SUPERADMIN')"}
+ *     },
+ *     normalizationContext={"groups"={"categories_read"}}
  * )
  */
 class Category
@@ -31,12 +40,13 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"products_read"})
+     * @Groups({"products_read","categories_read", "category_put"})
      */
     private $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="category")
+     * @Groups({"categories_read"})
      */
     private $products;
 

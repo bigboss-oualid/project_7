@@ -43,10 +43,15 @@ class AuthoredEntitySubscriber implements EventSubscriberInterface
         $method = $event->getRequest()->getMethod();
         /** @var Customer $customer */
         $customer = $this->security->getUser();
-        //set user to customer only by POST customers Requests
+        // Set user to customer only by POST customers Requests
         if (!$entity instanceof  User || Request::METHOD_POST !== $method) {
             return;
         }
+        // Allow logged person with SuperAdmin to choose user's creator
+        if (in_array(Customer::ROLE_SUPERADMIN, $customer->getRoles()) && !empty($entity->getCustomer())) {
+            $customer = $entity->getCustomer();
+        }
+
         /* @var User $entity*/
         $entity->setCustomer($customer)
             ->setCompany($customer->getCompany());

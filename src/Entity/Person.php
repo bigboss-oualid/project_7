@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -14,12 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Person
 {
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=3, minMessage="First name must contain between 3 and 255 characters!", max=255, maxMessage="First name must contain between 3 and 255 characters")
      * @Assert\NotBlank(message="First name is required!")
-     * @Groups({"users_read", "user_post", "users_read_admin"})
+     * @Groups({"users_read", "user_post"})
      */
     protected $firstName;
 
@@ -27,7 +27,7 @@ class Person
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=3, minMessage="Last name must contain between 3 and 255 characters!", max=255, maxMessage="Last name  must contain between 3 and 255 characters")
      * @Assert\NotBlank(message="Last name is required!")
-     * @Groups({"users_read", "user_post", "users_read_admin"})
+     * @Groups({"users_read", "user_post"})
      */
     protected $lastName;
 
@@ -36,7 +36,7 @@ class Person
      * @Assert\NotBlank(message="The email is required!")
      * @Assert\Length(min=5, minMessage="Email must contain between 3 and 255 characters!", max=255, maxMessage="Email must contain between 3 and 255 characters")
      * @Assert\Email(message="The email address must have a valid format!")
-     * @Groups({"users_read", "user_post", "users_read_admin"})
+     * @Groups({"users_read", "user_post"})
      */
     protected $email;
 
@@ -52,10 +52,10 @@ class Person
      */
     protected $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    protected $updatedAt;
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     public function getFirstName(): ?string
     {
@@ -113,18 +113,6 @@ class Person
     public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

@@ -7,7 +7,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\UserRepository;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -16,13 +15,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     collectionOperations={
  *      "GET"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *          "normalization_context" = {
  *              "groups"={"users_read"}
  *          }
  *      },
  *      "POST"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *          "denormalization_context" = {
  *              "groups"={"user_post"}
  *          },
@@ -33,13 +32,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *      "GET"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *          "normalization_context" = {
  *              "groups"={"users_read"}
  *          }
  *      },
+ *      "PUT"={
+ *          "security" = "is_granted('ROLE_SUPERADMIN')",
+ *          "normalization_context" = {
+ *              "groups"={"user_post"}
+ *          },
+ *          "denormalization_context" = {
+ *              "groups"={"users_read"}
+ *          }
+ *      },
  *      "DELETE"={
- *          "access_control" = "is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user",
+ *          "security" = "(is_granted('IS_AUTHENTICATED_FULLY') and object.getCustomer() === user) or is_granted('ROLE_SUPERADMIN')"  ,
  *          "requirements"={"id"="\d+"}
  *      }
  *     }
@@ -60,14 +68,9 @@ class User extends Person
     /**
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"users_read_admin"})
+     * @Groups({"user_post", "admin_user_read"})
      */
     private $customer;
-
-    public function __construct()
-    {
-        $this->createdAt = new DateTime();
-    }
 
     public function getId(): ?int
     {

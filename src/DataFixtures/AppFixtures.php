@@ -45,13 +45,13 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
+        $this->createSuperadmin($manager);
         $this->createCategory('Handy', $manager);
-
-        for ($c = 0; $c < 5; ++$c) {
+        for ($c = 1; $c <= 5; ++$c) {
             $this->createCustomer($manager, $c);
             /** @var Customer $customer */
             $customer = $this->getReference('customer_'.$c);
-            for ($u = 0; $u < 15; ++$u) {
+            for ($u = 1; $u <= 15; ++$u) {
                 $this->createUser($manager, $customer);
             }
         }
@@ -64,7 +64,7 @@ class AppFixtures extends Fixture
             /** @var Product $product */
             $product = $this->getReference('product_'.$p);
             for ($i = 0; $i < mt_rand(1, 3); ++$i) {
-                $this->createImage($manager, $product, $i, $p);
+                $this->createImage($manager, $product, $p);
             }
             $manager->persist($product);
         }
@@ -82,6 +82,25 @@ class AppFixtures extends Fixture
         $manager->persist($category);
     }
 
+    private function createSuperadmin(ObjectManager $manager): void
+    {
+        /** @var Customer $customer */
+        $customer = new Customer();
+
+        $customer->setUsername('admin')
+            ->setRoles([Customer::ROLE_SUPERADMIN])
+            ->setPassword($this->passwordEncoder->encodePassword($customer, 'demo'))
+            ->setLastName('Super')
+            ->setFirstName('Admin')
+            ->setEmail('superadmin@bilemo.de')
+            ->setCompany('bilemo')
+            ->setCreatedAt($this->faker->dateTimeBetween('-6 months', '-5 months'));
+
+        $this->addReference('customer_admin', $customer);
+
+        $manager->persist($customer);
+    }
+
     private function createCustomer(ObjectManager $manager, int $c = 0): void
     {
         /** @var Customer $customer */
@@ -96,10 +115,9 @@ class AppFixtures extends Fixture
             ->setCompany($this->faker->company)
             ->setCreatedAt($this->faker->dateTimeBetween('-6 months', '-1 months'));
 
-        if (0 === $c) {
-            $customer->setRoles([Customer::ROLE_ADMIN])
-                ->setUsername('admin')
-            ->setCompany('TEST');
+        if (1 === $c) {
+            $customer->setUsername('customerX')
+            ->setCompany('X');
         }
 
         $this->addReference('customer_'.$c, $customer);
@@ -136,11 +154,11 @@ class AppFixtures extends Fixture
         $manager->persist($product);
     }
 
-    private function createImage(ObjectManager $manager, Product $product, int $i, int $p): void
+    private function createImage(ObjectManager $manager, Product $product, int $p): void
     {
         $image = new Image();
-        $image->setName(strtolower(preg_replace('/\s+/', '_', self::HANDYS[$p]).'_'.$i))
-            ->setUrl('images/handy/')
+        $image->setName(self::HANDYS[$p])
+            ->setUrl('images/handy/'.mt_rand(1, 3).'.png')
             ->setProduct($product);
 
         $manager->persist($image);

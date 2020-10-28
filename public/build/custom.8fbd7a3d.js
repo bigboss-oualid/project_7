@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["custom"],{jRKz:function(e,t){setTimeout((function(){var e=document.createElement("img");e.src="../images/logo-ico.png",e.alt="logo",e.title="BileMo",e.width="25",e.height="40",document.getElementsByTagName("svg")[1].replaceWith(e)}),1200)}},[["jRKz","runtime"]]]);

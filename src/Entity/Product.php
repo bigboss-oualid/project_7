@@ -8,6 +8,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use App\Repository\ProductRepository;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,12 +19,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ApiResource(
  *     collectionOperations={
- *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}
+ *      "GET"={
+ *          "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "normalization_context"={"groups"={"products_read"}}
+ *      },
+ *      "POST"={"security" = "is_granted('ROLE_SUPERADMIN')"}
  *     },
  *     itemOperations={
- *      "GET"={"access_control" = "is_granted('IS_AUTHENTICATED_FULLY')"}
- *     },
- *     normalizationContext={"groups"={"products_read"}}
+ *      "GET"={"security" = "is_granted('IS_AUTHENTICATED_FULLY')"},
+ *      "PUT"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "DELETE"={"security" = "is_granted('ROLE_SUPERADMIN')"}
+ *     }
  * )
  * @ApiFilter(SearchFilter::class, properties={"name":"partial", "details":"partial", "price":"start"})
  * @ApiFilter(OrderFilter::class, properties={"price", "createdAt", "quantity"})
@@ -39,13 +45,13 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"products_read"})
+     * @Groups({"products_read", "categories_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"products_read"})
+     * @Groups({"products_read", "categories_read"})
      */
     private $name;
 
@@ -86,12 +92,6 @@ class Product
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"products_read"})
-     */
-    private $updatedAt;
-
-    /**
      * @ORM\OneToMany(targetEntity=Image::class, mappedBy="product", orphanRemoval=true)
      * @Groups({"products_read"})
      */
@@ -106,6 +106,7 @@ class Product
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->createdAt = new DateTime();
     }
 
     public function getId(): ?int
@@ -193,18 +194,6 @@ class Product
     public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

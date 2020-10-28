@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -16,10 +15,24 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @UniqueEntity("username", message="A user already exists with this username")
+ * @ApiResource(
+ *     collectionOperations={
+ *      "GET"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "POST"={"security" = "is_granted('ROLE_SUPERADMIN')"}
+ *     },
+ *     itemOperations={
+ *      "GET"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "PUT"={"security" = "is_granted('ROLE_SUPERADMIN')"},
+ *      "DELETE"={
+ *          "security"="is_granted('ROLE_SUPERADMIN') and object !== user",
+ *          "requirements"={"id"="\d+"}
+ *      }
+ *     }
+ * )
  */
 class Customer extends Person implements UserInterface
 {
-    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_SUPERADMIN = 'ROLE_SUPERADMIN';
     const ROLE_USER = 'ROLE_USER';
 
     const DEFAULT_ROLES = [self::ROLE_USER];
@@ -33,7 +46,7 @@ class Customer extends Person implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users_read_admin"})
+     * @Groups({"users_read", "user_post"})
      */
     private $username;
 
@@ -42,7 +55,7 @@ class Customer extends Person implements UserInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="The field is required!")
      * @Assert\Regex(
-     *     pattern="/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\W).{7,}/",
+     *     pattern="/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/",
      *     message="Password must be at least 7 characters long and contain at least one digit, one specific character one upper & lower case letter"
      * )
      */
@@ -50,19 +63,19 @@ class Customer extends Person implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"users_read_admin"})
      */
     private $roles = [];
 
     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="customer")
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="customer", cascade={"persist"}, orphanRemoval=true)
      */
     private $users;
 
     public function __construct()
     {
+        parent::__construct();
         $this->users = new ArrayCollection();
-        $this->roles = self::ROLE_USER;
+        $this->roles = self::DEFAULT_ROLES;
     }
 
     public function getId(): ?int
