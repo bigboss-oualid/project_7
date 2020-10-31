@@ -29,7 +29,9 @@ const authProvider = {
                 localStorage.setItem('token', token);
                 localStorage.setItem('role', decodedToken.roles);
                 if (localStorage.getItem('role') !== 'ROLE_SUPERADMIN') {
-                    return Promise.reject(new Error('Unauthorized'));
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('role');
+                    return Promise.reject(new Error('You do not have administrator access'));
                 }
             });
     },
@@ -60,10 +62,11 @@ const authProvider = {
         const token = localStorage.getItem('token');
 
         if (token) {
-            const {exp: expiration} = jwtDecode(token);
+            let {exp: expiration} = jwtDecode(token);
             if (expiration * 1000 > new Date().getTime()) {
                 return Promise.resolve();
             }
+            localStorage.removeItem('token');
             return Promise.reject(new Error('Your token is expired'));
         }
         return Promise.reject();

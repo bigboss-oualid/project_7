@@ -26,7 +26,6 @@ We are going to expose a number of APIs to enable the applications of other web 
     * [Behat](#behat)
   * [API Demonstration](#demo)
   * [Information](#info)
-#
 
 ## Getting Started
 
@@ -150,15 +149,18 @@ $ vendor\bin\behat.bat --tags=TAGS_NAME
 ```
 
 ### Demo
-**Visit the API demonstration:**   [![BileMo](https://img.shields.io/badge/-BileMo-white.svg)](https://bilemo.it-bigboss.de/ "Mobile
- B2B Company")
+**Visit the API demonstration:** 
 
-### Info 
+[![BileMo-backoffice](https://img.shields.io/badge/BileMo-Backoffice-white.svg)](https://bilemo.it-bigboss.de/ 
+"Manage your data")
+ 
+[![BileMo](https://img.shields.io/badge/BileMo-Documentation-green.svg)](https://bilemo.it-bigboss.de/api "How to Use the API")
+
+## Info 
 ###### Author
 [**Walid BigBoss**](https://it-bigboss.de)
 
 ###### Copyright
-
 Code released under the MIT License.
 
 [![GitHub License](https://img.shields.io/github/license/bigboss-oualid/projet_6?label=License)](https://github.com/bigboss-oualid/project_7/blob/master/LICENSE.md)

@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode";
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { HydraAdmin, ResourceGuesser, hydraDataProvider as baseHydraDataProvider, fetchHydra as baseFetchHydra } from "@api-platform/admin";
@@ -30,7 +31,17 @@ const apiDocumentationParser = entrypoint => parseHydraDocumentation(entrypoint,
                     api: result.api,
                     customRoutes: [
                         <Route path="/" render={() => {
-                            return window.localStorage.getItem("token") ? window.location.reload() : <Redirect to="/login" />
+                            /*const token = window.localStorage.getItem("token");
+                            if (token) {
+                                const {exp: expiration} = jwtDecode(token);
+                                if (expiration * 1000 > new Date().getTime()) {
+                                    return window.location.reload();
+                                }
+                                window.localStorage.removeItem("token");
+                            }
+                            return <Redirect to="/login" />;*/
+                            return window.localStorage.getItem("token") ? window.location.reload() : <Redirect
+                             to="/login" />
                         }} />
                     ],
                 });
