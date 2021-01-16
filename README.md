@@ -112,13 +112,13 @@ $ symfony server:start
 $ symfony server:start [-d] 
 ```
 
-###### Open your favorite browser
+> Open your favorite browser
 
 2. BileMo-API [Documentation interface](http://localhost:8000/api):
- >  you can here read the documentation of the API and try some endpoints. Log in with the account ``customerx`` to modify, create tricks & post comments.
+ >  You can here read the documentation of the API and try some endpoints. Log in with the account ``customerx``.
 
 3. BileMo-API [Backend interface ](http://localhost:8000): 
->  here you can manage the API Data (e.g. create, read, update or delete resources). Log in with the account ``admin`` to modify, create tricks & post comments.
+>  Here you can manage the API Data (e.g. create, read, update or delete resources). Log in with the account ``admin``.
 
 ###### Users accounts
 
@@ -163,4 +163,4 @@ $ vendor\bin\behat.bat --tags=TAGS_NAME
 ###### Copyright
 Code released under the MIT License.
 
-[![GitHub License](https://img.shields.io/github/license/bigboss-oualid/projet_6?label=License)](https://github.com/bigboss-oualid/project_7/blob/master/LICENSE.md)
+[![GitHub License](https://img.shields.io/github/license/bigboss-oualid/projet_6?label=License)](https://github.com/bigboss-oualid/project_7/blob/master/LICENSE)
